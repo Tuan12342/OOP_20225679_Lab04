@@ -2,4 +2,45 @@
     -Lớp Store là một aggregate vì nó quản lý danh sách các đối tượng Media thông qua itemsInStore
     -Lớp Cart là một aggregate vì nó quản lý các đối tượng Media trong giỏ hàng thông qua itemsOrdered
     -Lớp CompactDisc là một aggregate vì nó quản lý các đối tượng Track trong giỏ hàng thông qua tracks
+Câu 10 : Unique item in a list
+
+- If the passing object is not an instance of Media, what happens?
+- Nếu đối tượng truyền vào không phải là một instance của Media thì sẽ không thực hiện được phép so sánh. Nhưng nếu đối tượng truyền là instance con của Media thì ta vẫn sẽ thực hiện được phép so sánh.
+Ví dụ được thực hiện ở lớp Aims:
+
+Media book1 = new Book(5, "Book1", "Horror", 4.5f);
+Media book2 = new Book(6, "Book1", "Scientific", 5.5f);
+
+if (book1.equals(book2)) System.out.println("Two objects are equal");
+else System.out.println("Two objects are not equal");
+
+=> Kết quả là "Two objects are equal"
+
+
+12. Sort media in the cart
+a. What class should implement the Comparable interface?
+- Lớp chứa đối tượng cần so sánh, chẳng hạn Media hoặc các lớp con của nó như DigitalVideoDisc, Book, CompactDisc.
+
+
+b. In those classes, how should you implement the compareTo() method be to reflect the ordering that we want?
+- Em đã triển khai phương thức compareTo() trong lớp Media:
+    @Override
+   public int compareTo(Media other) {
+        int titleComparison = this.getTitle().compareTo(other.getTitle());
+        if (titleComparison != 0) {
+            return titleComparison;
+        } else {
+            return Double.compare(this.getCost(), other.getCost());
+        }
+    }
+    
+}
+
+
+c. Can we have two ordering rules of the item (by title then cost and by cost then title) if we use this Comparable interface approach?
+- Không ta không thể, Comparable chỉ cho phép định nghĩa một quy tắc sắp xếp duy nhất thông qua phương thức compareTo().
+Nếu cần nhiều quy tắc thì khi đó ta phải sử dụng Comparator như đã triển khai trong MediaComparatorByCostTitle và MediaComparatorByTitleCost.
+
+
+
 
